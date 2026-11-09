@@ -1,9 +1,5 @@
 target/
 
-# Instruções locais do Claude Code (nunca versionar)
-claude.md
-CLAUDE.md
-
 # IDE
 .idea/
 *.iml
