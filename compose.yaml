@@ -1,0 +1,39 @@
+# Compose local: testa o roteamento do gateway com o Product.
+# Atenção: o compose do Product-service também usa "name: store" e a porta 8080;
+# rode "docker compose down" lá antes de subir este.
+name: store
+
+services:
+
+  db:
+    image: postgres:17
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-store}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-store}
+      POSTGRES_DB: ${DB_NAME:-store}
+
+  product:
+    # a imagem pedrohmm1/product ainda não está no Docker Hub;
+    # depois do push, trocar por: image: pedrohmm1/product:latest
+    build: ../Product-service
+    # sem "ports": só acessível pela rede interna, via gateway
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_DB: ${DB_NAME:-store}
+      DATABASE_USERNAME: ${DB_USER:-store}
+      DATABASE_PASSWORD: ${DB_PASSWORD:-store}
+    depends_on:
+      - db
+
+  gateway:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - product
+
+volumes:
+  db-data:
