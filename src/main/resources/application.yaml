@@ -10,6 +10,8 @@ spring:
           default-filters:
             # o cliente não pode forjar a identidade: só o gateway define id-account
             - RemoveRequestHeader=id-account
+            # repassa o Host original: o serviço gera URLs públicas (ex.: Location), não http://product:8080
+            - PreserveHostHeader
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 
           globalcors:
