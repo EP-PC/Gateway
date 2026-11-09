@@ -10,6 +10,7 @@ spring:
           default-filters:
             # o cliente não pode forjar a identidade: só o gateway define id-account
             - RemoveRequestHeader=id-account
+            - RemoveRequestHeader=id-role
             # repassa o Host original: o serviço gera URLs públicas (ex.: Location), não http://product:8080
             - PreserveHostHeader
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
@@ -23,6 +24,15 @@ spring:
                 allowCredentials: true
 
           routes:
+
+            # o solve é só para o próprio gateway (rede interna): de fora, 404.
+            # Precisa vir ANTES da auth-service (a primeira rota que casa vence).
+            - id: auth-solve-blocked
+              uri: no://op
+              predicates:
+                - Path=/auth/solve
+              filters:
+                - SetStatus=404
 
             - id: auth-service
               uri: http://auth:8080
@@ -50,6 +60,12 @@ spring:
               uri: http://exchange:8080
               predicates:
                 - Path=/exchange/**
+
+store:
+  gateway:
+    auth:
+      # endpoint interno que valida o JWT (AuthorizationFilter)
+      solve-url: ${AUTH_SOLVE_URL:http://auth:8080/auth/solve}
 
 logging:
   level:
