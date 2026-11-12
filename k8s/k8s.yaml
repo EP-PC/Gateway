@@ -20,6 +20,16 @@ spec:
             imagePullPolicy: Always
             ports:
               - containerPort: 8080
+            # sem probe, o pod novo conta como pronto assim que o container sobe
+            # e o antigo cai antes do Spring terminar (~40 s de 503 no deploy).
+            # A 8080 (Netty) so abre no fim da inicializacao do contexto, entao
+            # o teste TCP basta: sem actuator e sem mudar codigo.
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 20
+              periodSeconds: 5
+              failureThreshold: 6
             resources:
               requests:
                 memory: "256Mi"
