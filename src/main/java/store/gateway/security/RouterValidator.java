@@ -16,6 +16,8 @@ public class RouterValidator {
         "GET /auth/logout",
         "GET /auth/health-check",
         "GET /accounts/health-check",
+        "GET /orders/health-check",
+        "GET /exchange/health-check",
         "GET /products/**"          // vitrine pública (inclui /products/health-check)
     );
 

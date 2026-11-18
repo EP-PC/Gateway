@@ -49,13 +49,13 @@ spring:
               predicates:
                 - Path=/products/**
 
-            # PENDENTE: confirmar path com o dono do serviço
+            # path confirmado com o dono do serviço
             - id: order-service
               uri: http://order:8080
               predicates:
                 - Path=/orders/**
 
-            # PENDENTE: confirmar path com o dono do serviço
+            # path confirmado com o dono do serviço (/exchange/{from}/{to})
             - id: exchange-service
               uri: http://exchange:8080
               predicates:
