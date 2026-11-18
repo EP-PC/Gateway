@@ -53,6 +53,7 @@ kubectl rollout status deployment/gateway --timeout=300s
   e o pod antigo continua atendendo até lá.
 
 **Tags:** depois de um deploy pelo Jenkins, o cluster roda a tag `<BUILD_ID>`. O `k8s/k8s.yaml`
-deste repo continua com a tag do commit (`7fda6bf`), que é a usada pelo `aws/up.ps1` do
-store-pma ao recriar o cluster. Ou seja, um cluster recém-criado volta para a imagem do
-manifesto até o próximo build no Jenkins.
+deste repo fixa a tag `3` (build #3 do Jenkins, commit `96e8c3f`), que é a usada pelo
+`aws/up.ps1` do store-pma ao recriar o cluster. Ou seja, um cluster recém-criado volta para a
+imagem do manifesto até o próximo build no Jenkins; atualize a tag do manifesto quando quiser
+que ele acompanhe um build mais novo.
